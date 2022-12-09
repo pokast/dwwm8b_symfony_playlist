@@ -5,8 +5,48 @@
 {% block h1 %}Mes préférences du moment{% endblock %}
 
 {% block main %}
-    <div class="d-flex justify-content-end align-items-center">
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="d-flex justify-content-end align-items-center my-3">
         <a href="{{ path('song.create') }}" class="btn btn-primary">Nouveau son</a>
     </div>
+
+    {% if songs|length == 0 %}
+        <p>Aucun son ajouté à la liste</p>
+         {% else %}
+                <div class="table-responsive">
+            <table class="text-center table table-striped table-hover">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th>Id</th>
+                        <th>Titre</th>
+                        <th>Artists</th>
+                        <th>Note</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for song in songs %}
+                        <tr>
+                            <td>{{ song.id }}</td>
+                            <td>{{ song.title }}</td>
+                            <td>{{ song.artists }}</td>
+                            <td>{{ song.score ? song.score : '---'}}</td>
+                            <td>
+                                <a href="{{ path('song.edit', {'id' : song.id}) }}" class="btn btn-sm btn-secondary">Modifier</a>
+                                <a href="" class="btn btn-sm btn-danger">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+                </div>
+    {% endif %}
+    
 {% endblock %}
 
